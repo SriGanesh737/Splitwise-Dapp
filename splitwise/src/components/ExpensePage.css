@@ -1,0 +1,48 @@
+/* ExpensePage.css */
+
+.expense-container {
+  background-color: #f7f7f7;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.expense-item {
+  background-color: #fff;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.expense-description {
+  font-weight: bold;
+}
+
+.expense-owner {
+  font-weight: bold;
+}
+
+.involved-members-list {
+  list-style: none;
+  padding: 0;
+}
+
+.involved-member {
+  margin: 5px 0;
+}
+
+.amount-to-pay {
+  color: #e74c3c;
+}
+
+.hide {
+  display: none;
+}
+
+.totalBalance {
+  font-weight: bold;
+  font-size: 0.65em;
+  color: rgb(114, 114, 213)
+}
