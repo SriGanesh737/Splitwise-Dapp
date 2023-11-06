@@ -3,14 +3,16 @@
 pragma solidity ^0.8.0;
 contract Splitwise {
     struct Expense {
-        uint id;
-        string description;
-        address owner;
-        address[] involvedMembers;
-        uint[] amountsOwed;
-        bool isSettled;
-        bool[] hasPaid;  // Boolean array to track who has paid
-    }
+    uint id;
+    string description;
+    address owner;
+    address[] involvedMembers;
+    uint[] amountsOwed;
+    bool isSettled;
+    bool[] hasPaid;  // Boolean array to track who has paid
+    uint interestRate; // New field for interest rate (in percent, e.g., 5%)
+    uint creationTimestamp; // Timestamp when the expense is created
+}
 
     mapping(address => int) public balances;
 
@@ -18,34 +20,28 @@ contract Splitwise {
 
     event ExpenseCreated(uint expenseId);
     event ExpenseSettled(uint expenseId);
-    event PaymentRequest(uint expenseId, address indexed user);
 
 
-    function createExpense(
-        address[] memory members,
-        uint[] memory amounts,
-        string memory description
+function createExpense(
+    address[] memory members,
+    uint[] memory amounts,
+    string memory description,
+    uint interestRate // New parameter for interest rate
     ) public {
-        require(members.length == amounts.length, "Mismatched arrays");
+    require(members.length == amounts.length, "Mismatched arrays");
 
-        // Create a new expense
-        uint newExpenseId = expenses.length;
-        expenses.push(Expense(newExpenseId, description, msg.sender, members, amounts, false, new bool[](members.length)));
+    uint timestamp = block.timestamp;
 
-        // Update balances for the involved members
-        for (uint i = 0; i < members.length; i++) {
-            balances[members[i]] += int(amounts[i]);
-        }
+    // Create a new expense
+    uint newExpenseId = expenses.length;
+    expenses.push(Expense(newExpenseId, description, msg.sender, members, amounts, false, new bool[](members.length), interestRate,timestamp));
 
-        emit ExpenseCreated(newExpenseId);
-
-        // Send payment requests to each involved member
-        for (uint i = 0; i < members.length; i++) {
-            if (members[i] != msg.sender) {
-                emit PaymentRequest(newExpenseId, members[i]);
-            }
-        }
+    // Update balances for the involved members
+    for (uint i = 0; i < members.length; i++) {
+        balances[members[i]] += int(amounts[i]);
     }
+}
+
 
 function markUserAsPaid(uint expenseId, address user) public {
     require(expenseId < expenses.length, "Expense does not exist");

@@ -32,3 +32,27 @@
   color: #27ae60;
   font-weight: bold;
 }
+
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.toggle-switch input[type="radio"] {
+  display: none;
+}
+
+.toggle-switch label {
+  cursor: pointer;
+  background-color: #ccc;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.toggle-switch input[type="radio"]:checked + label {
+  background-color: #007bff; /* Set your desired active color */
+  color: #fff; /* Set text color for active state */
+}
+

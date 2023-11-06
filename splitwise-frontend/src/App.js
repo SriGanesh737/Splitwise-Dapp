@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"; // Import BrowserRouter, Routes, and Route
-
+import { Navbar, Nav } from "react-bootstrap";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpensePage from "./components/ExpensePage";
 import OwnerExpensePage from "./components/OwnerExpensePage";
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+
 
 function App() {
   const [contract, setContract] = useState(null);
@@ -51,25 +53,6 @@ function App() {
             "type": "event"
           },
           {
-            "anonymous": false,
-            "inputs": [
-              {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "expenseId",
-                "type": "uint256"
-              },
-              {
-                "indexed": true,
-                "internalType": "address",
-                "name": "user",
-                "type": "address"
-              }
-            ],
-            "name": "PaymentRequest",
-            "type": "event"
-          },
-          {
             "inputs": [
               {
                 "internalType": "address",
@@ -104,6 +87,11 @@ function App() {
                 "internalType": "string",
                 "name": "description",
                 "type": "string"
+              },
+              {
+                "internalType": "uint256",
+                "name": "interestRate",
+                "type": "uint256"
               }
             ],
             "name": "createExpense",
@@ -171,6 +159,16 @@ function App() {
                 "internalType": "bool",
                 "name": "isSettled",
                 "type": "bool"
+              },
+              {
+                "internalType": "uint256",
+                "name": "interestRate",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "creationTimestamp",
+                "type": "uint256"
               }
             ],
             "stateMutability": "view",
@@ -241,6 +239,16 @@ function App() {
                     "internalType": "bool[]",
                     "name": "hasPaid",
                     "type": "bool[]"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "interestRate",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "creationTimestamp",
+                    "type": "uint256"
                   }
                 ],
                 "internalType": "struct Splitwise.Expense[]",
@@ -291,6 +299,16 @@ function App() {
                     "internalType": "bool[]",
                     "name": "hasPaid",
                     "type": "bool[]"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "interestRate",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "creationTimestamp",
+                    "type": "uint256"
                   }
                 ],
                 "internalType": "struct Splitwise.Expense[]",
@@ -334,7 +352,7 @@ function App() {
           }
         ];
         
-        const contractAddress = "0xeFB7695F77F4638F4bbE49991811f3E0e60c5e98"; // Replace with your contract address
+        const contractAddress = "0xFEfb209C061d77ac0f043924920d4B64c82D1aF2"; // Replace with your contract address
 
         const deployedContract = new ethers.Contract(contractAddress, abi, signer);
         setContract(deployedContract);
@@ -347,22 +365,24 @@ function App() {
     initContract();
   }, [walletAddress]);
 
+  console.log(contract);
+
   return (
     <Router>
       <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/expenses">Expenses</Link>
-            </li>
-            <li>
-              <Link to="/myexpenses">Expenses by You</Link>
-            </li>
-          </ul>
-        </nav>
+      <Navbar bg="dark" variant="dark" className="mb-3">
+      <Nav className="mr-auto">
+        <Link to="/" className="nav-link custom-link">
+          Home
+        </Link>
+        <Link to="/expenses" className="nav-link custom-link">
+          Expenses
+        </Link>
+        <Link to="/myexpenses" className="nav-link custom-link">
+          Expenses by You
+        </Link>
+      </Nav>
+      </Navbar>
 
         <h1>Splitwise Expense Tracker</h1>
         <p>Connected Wallet Address: {walletAddress}</p>

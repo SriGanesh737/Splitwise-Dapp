@@ -25,15 +25,26 @@ function OwnerExpensePage({ contract, walletAddress }) {
   return (
     <div className="owner-expense-container">
       <h2>Your Expenses as Owner</h2>
-      <ToggleButtonGroup
-        type="radio"
-        name="showSettled"
-        value={showSettled}
-        onChange={toggleShowSettled}
-      >
-        <ToggleButton value={false}>Unsettled</ToggleButton>
-        <ToggleButton value={true}>Settled</ToggleButton>
-      </ToggleButtonGroup>
+      <div className="toggle-switch">
+  <input
+    type="radio"
+    id="unSettledToggle"
+    value="unsettled"
+    checked={!showSettled}
+    onChange={() => toggleShowSettled(false)}
+  />
+  <label htmlFor="unSettledToggle">Unsettled</label>
+  
+  <input
+    type="radio"
+    id="SettledToggle"
+    value="settled"
+    checked={showSettled}
+    onChange={() => toggleShowSettled(true)}
+  />
+  <label htmlFor="SettledToggle">Settled</label>
+      </div>
+
       <ul>
         {expenses.map((expense) => {
           if (showSettled !== expense.isSettled) {
